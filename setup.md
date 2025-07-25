@@ -23,4 +23,4 @@ PDF BOt
   streamlit run app.py
  ```
 
-#### What is the size of the embedding? What is the vector DB that you are using? 
+
