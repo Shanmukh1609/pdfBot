@@ -16,7 +16,7 @@ PDF BOt
   ```
  Download the packages
   ``` (shell)
-  pip install -r requirement.txt
+  pip install -r requirements.txt
   ```
  Run the files
  ``` (shell)

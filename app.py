@@ -3,8 +3,12 @@ import os
 from dotenv import load_dotenv
 from pypdf import PdfReader
 from langchain.text_splitter import CharacterTextSplitter
-from langchain.embeddings import OpenAIEmbeddings,HuggingFaceInstructEmbeddings
-from langchain.vectorstores import FAISS
+# from langchain_openai import OpenAIEmbeddings
+# from langchain.embeddings import HuggingFaceInstructEmbeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain_community.vectorstores import FAISS
+from langchain.memory import ConversationBufferMemory
+from langchain.chains import ConversationalRetrievalChain
 
 def getPdfText(pdf_docs):
    text = ""
@@ -26,10 +30,23 @@ def getTextChunks(raw_text, chunk_size=1000, overlap=200):
    return textChunks
 
 def getVectorStore(textChunks):
-    embeddings = OpenAIEmbeddings()
-    vectorStore = FAISS.from_texts(textChunks, embeddings)
+    print("Function getVectorStore")
+    gemini_api_key = os.getenv("GEMINI_API_KEY")
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001",google_api_key=gemini_api_key)
+   #  embeddings = OpenAIEmbeddings()
+    vectorStore = FAISS.from_texts(texts=textChunks,embedding= embeddings)
+    print("Stored in the vector store")
     return vectorStore
 
+   #  embeddings= HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-xl")
+
+def getConversationChain(vectorStore):
+   memory = ConversationBufferMemory(memory_key="chat_history",return_messages=True)
+   # We need the memory.
+   #We need the language model.
+   conversation_chain=ConversationalRetrievalChain.from_llm()
+   
+   
 def main():
    load_dotenv()  # Load environment variables from .env file
    st.set_page_config(page_title="Chat with PDFs",page_icon="books")
@@ -54,6 +71,8 @@ def main():
             # create the vector store
             vectorStore = getVectorStore(textChunks)
            
+           #create conversAtion chain
+            # conversation = getConversationChain(vectorStore)
        
 
    

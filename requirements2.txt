@@ -1,0 +1,8 @@
+streamlit
+python-dotenv
+pypdf
+faiss-cpu 
+# langchain==0.1.1 Uneccessary, use langchain-communit
+langchain-core==0.1.23
+langchain-community==0.0.20
+# langchain-google-genai==0.0.6
