@@ -1,6 +1,6 @@
 # PdfBot
 
-PDF BOt
+
  Establish the environment
   ``` (shell)
   python -m venv venv
