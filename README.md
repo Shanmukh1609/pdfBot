@@ -1,22 +1,22 @@
 # pdfBot
 
-**Concepts Utilized** : Semantic Searching, Vector Database, Embedding, Memory of Conversations, QA model regarding the pdfs.
+## Concepts Utilized 
+Semantic Searching, Vector Database, Embedding, Memory of Conversations, QA model regarding the pdfs.
 
-One or more pdf can be taken as the input. The pdfs are converted into chunks of text. I am using google's ``` gemini-embedding-001 ``` as the embedding model to generate the embedding for the
-chunks of the text. I am not using the model directly, which means that I am using the API to get the embeddings. which raises the questions such as
-- What is the limit on the chunks of text or tokens it can embed?
-- What is the size of each embedding?
+## Description
 
-After generation of the embedding, we do store them in the faiss vector database. 
-After that we are using the language model to answer the question. 
+## Working
+- A PDF Bot that is capable of taking multiple PDFs as the input.
+- It converts the contents of pdfs into chunks of text.
+-  ``` gemini-embedding-001 ``` is used to generate embeddings of the text.
+-  Each embedding is of size .
+-  Embeddings are stored in the   ``` FAISS ``` vector db.
+-  When a query is asked by the user, it searches for the semantically similar embeddings to user request query.
+-  The embeddings of context and query are given to ``` gemini-2.5 pro ``` model to generate context aware answers.
 
-- What is the memory ie how it saves and uses past conversations?
-- How does it use the semamtic similarity between the query and the embeddings of the database?
+## SETUP
+- Visit [setup.md](./setup.md) to run the project.
 
--Take a time of 2-3 hours. Complete the following
-- Get a good understanding
-- Write a good readme file
-- Make the repo public
-- Add it in the resume.
+
   
   
