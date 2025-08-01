@@ -50,7 +50,8 @@ def getConversationChain(vectorStore):
         temperature=0.5,
         google_api_key=gemini_api_key,
         max_output_tokens=512,
-        convert_system_message_to_human=True
+        convert_system_message_to_human=True,
+        
     )
 
     conversation_chain = ConversationalRetrievalChain.from_llm(
@@ -61,8 +62,14 @@ def getConversationChain(vectorStore):
     return conversation_chain
 
 def handleUserQuery(user_query):
-    response = st.session_state.conversation.invoke({"question": user_query})
+    if not user_query or not user_query.strip():
+        print("❌ Empty or invalid query passed to handleUserQuery()")
+        return
+    # print(user_query)
+    response = st.session_state.conversation.invoke({"question": user_query.strip()})
     st.session_state.chat_history = response['chat_history']
+    
+    print(response,"\n")
 
     # Iterate through the chat history and display messages using templates
     for i, message in enumerate(st.session_state.chat_history):
@@ -91,9 +98,23 @@ def main():
 
     st.header("Chat with multiple PDFs: books, articles")
     user_query = st.text_input("Ask a question about your docs:")
-
+    
     if user_query:
-        handleUserQuery(user_query)
+        if user_query:
+            retrieved_docs = st.session_state.conversation.retriever.get_relevant_documents(user_query)
+
+            # ✅ Check if any chunks were retrieved
+            if retrieved_docs:
+                print(f"✅ Retrieved {len(retrieved_docs)} relevant chunks for query: '{user_query}'")
+                for i, doc in enumerate(retrieved_docs):
+                    print(f"\n--- Chunk {i+1} ---\n{doc.page_content[:300]}\n")
+                handleUserQuery(user_query)
+            else:
+                print("❌ No relevant chunks retrieved for the query.")
+                st.warning("No relevant content found for the query. Try rephrasing.")
+
+            
+
 
     # Display initial chat messages only if history is empty
     if not st.session_state.chat_history:
